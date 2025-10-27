@@ -90,7 +90,7 @@ export default function WeddingInvitation() {
       <BasicCTA />
       
       {/* 🎵 Reproductor de audio fijo */}
-      {/*<AudioPlayer />*/}
+      <AudioPlayer />
     </div>
   )
 }
