@@ -101,7 +101,9 @@ export default function DressCodeSection() {
           </h3>
           
           {/* Subtítulo - Animación desde la derecha */}
-          <p className={`text-2xl text-sky-500 transition-all duration-700 delay-700 ${
+          <p 
+          style={{display:'none'}}
+          className={`text-2xl text-sky-500 transition-all duration-700 delay-700 ${
             isVisible 
               ? 'opacity-100 translate-x-0' 
               : 'opacity-0 translate-x-8'
