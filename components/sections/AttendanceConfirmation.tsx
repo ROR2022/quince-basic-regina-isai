@@ -201,6 +201,9 @@ const AttendanceConfirmation = () => {
       return;
     }
 
+    setIsSubmitting(true);
+    setShowPopupModal(false);
+
     // Construir el mensaje igual que en processConfirmation
     const confirmacionTexto = formData.confirmacion === "si" ? "✅ ¡Confirmo mi asistencia!" : "❌ No podré asistir";
     const invitadosTexto = formData.numeroInvitados === 1 ? "1 persona" : `${formData.numeroInvitados} personas`;
@@ -218,17 +221,84 @@ ${formData.mensaje ? `💌 *Mensaje especial:*\n${formData.mensaje}` : ""}
 ¡Gracias por responder! 💖✨`;
 
     try {
-      await navigator.clipboard.writeText(mensaje);
-      alert("✅ ¡Mensaje copiado! Ahora abre WhatsApp y envíalo a:\n+52 1 871 124 9363");
-      setShowPopupModal(false);
-      
       // Procesar confirmación automática en backend
-      processConfirmation();
+      const confirmationData = {
+        name: formData.nombre.trim(),
+        numberOfGuests: formData.numeroInvitados,
+        willAttend: formData.confirmacion === "si",
+        comments: formData.mensaje?.trim() || undefined,
+        phone: formData.telefono?.trim() || undefined,
+      };
+
+      console.log("🎯 Enviando confirmación automática...", confirmationData);
+
+      const response = await fetch("/api/guests/confirm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(confirmationData),
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        console.log("✅ Confirmación guardada exitosamente");
+      }
+    } catch (error) {
+      console.error("❌ Error procesando confirmación:", error);
+    }
+
+    // Intentar copiar al portapapeles
+    try {
+      await navigator.clipboard.writeText(mensaje);
+      alert(`✅ ¡Mensaje copiado exitosamente! 
+
+Ahora abre WhatsApp y envíalo a:
+📱 +52 1 773 126 6345
+
+El mensaje ya está en tu portapapeles, solo pégalo en WhatsApp.`);
+      
+      setShowSuccess(true);
+      setIsSubmitting(false);
+      
+      // Limpiar formulario después de 3 segundos
+      setTimeout(() => {
+        setFormData({
+          nombre: "",
+          telefono: "",
+          numeroInvitados: 1,
+          confirmacion: "si",
+          mensaje: "",
+        });
+        setShowSuccess(false);
+      }, 3000);
+      
     } catch (error) {
       // Fallback si no funciona clipboard API
-      prompt("Copia este mensaje y envíalo por WhatsApp:", mensaje);
-      setShowPopupModal(false);
-      processConfirmation();
+      console.log("📋 Usando fallback para copiar mensaje");
+      const userCopied = prompt(`Copia este mensaje y envíalo por WhatsApp a +52 1 773 126 6345:
+
+${mensaje}`);
+      
+      if (userCopied !== null) {
+        setShowSuccess(true);
+        setIsSubmitting(false);
+        
+        // Limpiar formulario después de 3 segundos
+        setTimeout(() => {
+          setFormData({
+            nombre: "",
+            telefono: "",
+            numeroInvitados: 1,
+            confirmacion: "si",
+            mensaje: "",
+          });
+          setShowSuccess(false);
+        }, 3000);
+      } else {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -238,6 +308,9 @@ ${formData.mensaje ? `💌 *Mensaje especial:*\n${formData.mensaje}` : ""}
       alert("Por favor ingresa tu nombre primero");
       return;
     }
+
+    setIsSubmitting(true);
+    setShowPopupModal(false);
 
     // Construir el mensaje igual que en processConfirmation
     const confirmacionTexto = formData.confirmacion === "si" ? "✅ ¡Confirmo mi asistencia!" : "❌ No podré asistir";
@@ -255,15 +328,50 @@ ${formData.mensaje ? `💌 *Mensaje especial:*\n${formData.mensaje}` : ""}
 
 ¡Gracias por responder! 💖✨`;
 
+    try {
+      // Procesar confirmación automática en backend
+      const confirmationData = {
+        name: formData.nombre.trim(),
+        numberOfGuests: formData.numeroInvitados,
+        willAttend: formData.confirmacion === "si",
+        comments: formData.mensaje?.trim() || undefined,
+        phone: formData.telefono?.trim() || undefined,
+      };
+
+      console.log("🎯 Enviando confirmación automática...", confirmationData);
+
+      const response = await fetch("/api/guests/confirm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(confirmationData),
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        console.log("✅ Confirmación guardada exitosamente");
+      }
+    } catch (error) {
+      console.error("❌ Error procesando confirmación:", error);
+    }
+
     // Codificar el mensaje para URL
     const mensajeCodificado = encodeURIComponent(mensaje);
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${mensajeCodificado}`;
 
-    // Procesar confirmación automática en backend antes de abrir WhatsApp
-    await processConfirmation();
+    console.log("🌐 Abriendo WhatsApp en la misma ventana:", whatsappUrl);
 
-    // Abrir WhatsApp en la misma ventana
-    window.location.href = whatsappUrl;
+    // Mostrar estado de éxito antes de redirigir
+    setShowSuccess(true);
+    setIsSubmitting(false);
+
+    // Pequeño delay para que el usuario vea el mensaje de éxito
+    setTimeout(() => {
+      // Abrir WhatsApp en la misma ventana
+      window.location.href = whatsappUrl;
+    }, 1000);
   };
 
   const handleInputChange = (
@@ -921,6 +1029,28 @@ ${formData.mensaje ? `💌 *Mensaje especial:*\n${formData.mensaje}` : ""}
                   )}
                 </div>
               </Button>
+
+              {/* Botones alternativos de emergencia */}
+              {!showSuccess && (
+                <div className="mt-4 flex gap-3 justify-center flex-wrap">
+                  <button
+                    type="button"
+                    onClick={openWhatsAppInSameWindow}
+                    disabled={isSubmitting || !formData.nombre.trim()}
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    🌐 Abrir WhatsApp aquí
+                  </button>
+                  <button
+                    type="button"
+                    onClick={copyMessageToClipboard}
+                    disabled={isSubmitting || !formData.nombre.trim()}
+                    className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-xl text-sm font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    📋 Copiar mensaje
+                  </button>
+                </div>
+              )}
 
               {/* Texto informativo debajo del botón */}
               <p className={`mt-4 text-sm opacity-75 text-pink-500 bg-emerald-200 bg-opacity-50 p-4 rounded-xl transition-all duration-1000 delay-8000 ${
