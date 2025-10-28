@@ -2,7 +2,7 @@ export const quinceMainData = {
   hero: {
     name: "Regina Isai",
     subtitle: "¡Mis XV años!",
-    backgroundImage: "/images/fondoFer1.jpg",
+    backgroundImage: "/images/fondoAtardecer1.png",
     quote:
       "La vida es un viaje mágico, y hoy celebro un capítulo especial lleno de sueños y esperanza.",
     backgroundCarrouselImages: [
@@ -65,9 +65,9 @@ export const quinceMainData = {
     party: {
       time: "14:30 hrs.",
       venue: "Salón Los Arbolitos",
-      address: "Santa fe de Guadalupe, la Sauceda Guanajuato.",
+      address: "Av Juárez 20, Presas, 42760 Presas, Hgo.",
       type: "Recepción",
-      ubiLink: "https://maps.app.goo.gl/qNFsbPPuwyCSMUim9",
+      ubiLink: "https://maps.app.goo.gl/3ZekXHHBKEXcppAM6",
     },
     dressCode: "Formal - Rojo solo la quinceañera",
     restrictions: "",
@@ -182,37 +182,11 @@ export const quinceMainData = {
   },
   gifts: {
     title: "Lista de Regalos",
-    subtitle: "Tu presencia es el mejor regalo, pero si deseas contribuir, aquí tienes algunas ideas.",
+    subtitle: "Tu presencia es el mejor regalo, pero si deseas contribuir, lo que me puedas dar sera bien recibido.",
     message:
-      "Agradezco de corazón tu generosidad y apoyo en este día tan especial. ¡Gracias por ser parte de mi vida!",
+      "Tu presencia es el mejor regalo, pero si deseas contribuir, lo que me puedas dar sera bien recibido.",
     giftsOptions: [
-      {
-        id: "lluviaSobres",
-        name: "Lluvia de Sobres",
-        icon: "💌",
-        description:
-          "Tu presencia es el mejor regalo, pero si deseas contribuir, una lluvia de sobres sería muy apreciada.",
-        image: "/images/gifts/envelope.png",
-        link: "https://example.com/lluvia-de-sobres",
-      },
-      {
-        id: "transferencia",
-        name: "Transferencia Bancaria",
-        icon: "🏦",
-        description:
-          "Si prefieres, puedes hacer una transferencia bancaria como regalo.",
-        image: "/images/gifts/bank-transfer.png",
-        link: "https://example.com/transferencia-bancaria",
-      },
-      {
-        id: "mesaRegalos",
-        name: "Mesa de Regalos",
-        icon: "🎁",
-        description:
-          "Hemos creado una mesa de regalos con opciones que nos encantaría recibir.",
-        image: "/images/gifts/gift-box.png",
-        link: "https://example.com/mesa-de-regalos",
-      }
+      
     ],
   },
   gallery: {
