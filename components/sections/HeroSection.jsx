@@ -55,14 +55,14 @@ export default function HeroSection() {
     >
       {/* <BackgroundCarrousel images={backgroundCarrouselImages}/> */}
 
-      <Image
+      {/* <Image
         src='/images/regina01.png'
         alt="Background"
         layout="fill"
         objectFit="cover"
         quality={100}
         className="absolute inset-0 w-full h-full object-cover z-0"
-      />
+      /> */}
       <div
         className="absolute inset-0 z-0"
         //style={getOverlayStyle(hero.overlay)}

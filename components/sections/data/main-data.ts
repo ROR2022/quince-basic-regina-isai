@@ -2,7 +2,7 @@ export const quinceMainData = {
   hero: {
     name: "Regina Isai",
     subtitle: "¡Mis XV años!",
-    backgroundImage: "/images/fondoAtardecer1.png",
+    backgroundImage: "/images/regina01.jpg",
     quote:
       "La vida es un viaje mágico, y hoy celebro un capítulo especial lleno de sueños y esperanza.",
     backgroundCarrouselImages: [
@@ -27,7 +27,7 @@ export const quinceMainData = {
                 por cuidarme y guiarme en este camino.
                 Hace quince años mis padres agradecieron a Dios por mi vida. 
                 Hoy, yo agradezco a Dios por ellos, por su infinito amor y paciencia.`,
-      backgroundImage: "/images/fondoFer1.jpg",
+      backgroundImage: "/images/fondoFloresRojas1.jpeg",
     },
     //Padrino Ma. Asunción Ramirez y Juan Gutiérrez
     godparents: {
