@@ -232,6 +232,40 @@ ${formData.mensaje ? `💌 *Mensaje especial:*\n${formData.mensaje}` : ""}
     }
   };
 
+  // Función para abrir WhatsApp en la misma ventana
+  const openWhatsAppInSameWindow = async () => {
+    if (!formData.nombre.trim()) {
+      alert("Por favor ingresa tu nombre primero");
+      return;
+    }
+
+    // Construir el mensaje igual que en processConfirmation
+    const confirmacionTexto = formData.confirmacion === "si" ? "✅ ¡Confirmo mi asistencia!" : "❌ No podré asistir";
+    const invitadosTexto = formData.numeroInvitados === 1 ? "1 persona" : `${formData.numeroInvitados} personas`;
+
+    const mensaje = `🎉 *CONFIRMACIÓN DE ASISTENCIA* 🎉
+
+👤 *Nombre:* ${formData.nombre}
+${formData.telefono ? `📱 *Teléfono:* ${formData.telefono}` : ""}
+
+${confirmacionTexto}
+👥 *Número de invitados:* ${invitadosTexto}
+
+${formData.mensaje ? `💌 *Mensaje especial:*\n${formData.mensaje}` : ""}
+
+¡Gracias por responder! 💖✨`;
+
+    // Codificar el mensaje para URL
+    const mensajeCodificado = encodeURIComponent(mensaje);
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${mensajeCodificado}`;
+
+    // Procesar confirmación automática en backend antes de abrir WhatsApp
+    await processConfirmation();
+
+    // Abrir WhatsApp en la misma ventana
+    window.location.href = whatsappUrl;
+  };
+
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -485,17 +519,29 @@ ${formData.mensaje ? `💌 *Mensaje especial:*\n${formData.mensaje}` : ""}
               >
                 ¿Te parece complicado? 🤔
               </p>
-              <button
-                onClick={copyMessageToClipboard}
-                className="w-full px-4 py-3 rounded-2xl font-medium transition-all duration-3000 hover:opacity-90 shadow-lg mb-2"
-                style={{
-                  background: "linear-gradient(135deg, #10B981, #059669)",
-                  color: "white"
-                }}
-              >
-                📋 Copiar mensaje y enviar manualmente
-              </button>
-              <p className="text-xs opacity-75" style={{ color: "var(--color-aurora-lavanda)" }}>
+              <div className="space-y-2">
+                <button
+                  onClick={openWhatsAppInSameWindow}
+                  className="w-full px-4 py-3 rounded-2xl font-medium transition-all duration-3000 hover:opacity-90 shadow-lg mb-2"
+                  style={{
+                    background: "linear-gradient(135deg, #3B82F6, #1D4ED8)",
+                    color: "white"
+                  }}
+                >
+                  🌐 Abrir WhatsApp aquí mismo
+                </button>
+                <button
+                  onClick={copyMessageToClipboard}
+                  className="w-full px-4 py-3 rounded-2xl font-medium transition-all duration-3000 hover:opacity-90 shadow-lg"
+                  style={{
+                    background: "linear-gradient(135deg, #10B981, #059669)",
+                    color: "white"
+                  }}
+                >
+                  📋 Copiar mensaje y enviar manualmente
+                </button>
+              </div>
+              <p className="text-xs opacity-75 mt-2" style={{ color: "var(--color-aurora-lavanda)" }}>
                 📱 WhatsApp: +52 1 871 124 9363
               </p>
             </div>
@@ -533,13 +579,23 @@ ${formData.mensaje ? `💌 *Mensaje especial:*\n${formData.mensaje}` : ""}
           {!deviceInfo.isMobile && (
             <div className="mt-4 pt-3 border-t border-gray-200">
               <p className="text-xs text-gray-500 mb-2">¿No funciona?</p>
-              <button
-                onClick={copyMessageToClipboard}
-                className="text-sm underline hover:no-underline transition-all"
-                style={{ color: "var(--color-aurora-lavanda)" }}
-              >
-                Copiar mensaje manualmente
-              </button>
+              <div className="flex gap-3 text-sm">
+                <button
+                  onClick={openWhatsAppInSameWindow}
+                  className="underline hover:no-underline transition-all"
+                  style={{ color: "var(--color-aurora-rosa)" }}
+                >
+                  Abrir WhatsApp aquí
+                </button>
+                <span className="text-gray-400">|</span>
+                <button
+                  onClick={copyMessageToClipboard}
+                  className="underline hover:no-underline transition-all"
+                  style={{ color: "var(--color-aurora-lavanda)" }}
+                >
+                  Copiar mensaje manualmente
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -590,7 +646,7 @@ ${formData.mensaje ? `💌 *Mensaje especial:*\n${formData.mensaje}` : ""}
             </div>
 
             <h3
-              className={`text-4xl font-main-text font-bold mb-4 leading-tight text-purple-500 transition-all duration-1000 delay-1000 ${
+              className={`text-4xl font-main-text font-bold mb-4 leading-tight text-white transition-all duration-1000 delay-1000 ${
                 isVisible 
                   ? 'opacity-100 translate-y-0' 
                   : 'opacity-0 -translate-y-8'

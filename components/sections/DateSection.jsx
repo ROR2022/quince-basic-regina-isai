@@ -129,7 +129,7 @@ export default function DateSection() {
               style={{
                 textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
               }}
-              className="font-main-text text-4xl font-bold holographic-text"
+              className="font-main-text text-4xl font-bold text-white"
             >
               FECHA ESPECIAL
             </h2>
