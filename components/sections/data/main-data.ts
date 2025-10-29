@@ -21,7 +21,7 @@ export const quinceMainData = {
     celebrant: "Regina Isai",
     parents: {
       father: "Orlando Pérez García",
-      mother: "Marlem Rodriguez Perez",
+      mother: "Marlem Rodríguez Pérez",
       message: `Hoy, mi corazón rebosa de gratitud. 
                 Doy gracias a Dios por cada paso de mi vida y a mis padres  
                 por cuidarme y guiarme en este camino.
